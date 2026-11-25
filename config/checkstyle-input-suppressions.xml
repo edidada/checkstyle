@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionFilter Configuration 1.1//EN"
+        "https://checkstyle.org/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+  <!-- Check applies to resources-noncompilable files.  -->
+  <suppress id="presenceOfCompilationComment" files="resources/.*"/>
+
+  <suppress id="presenceOfCompilationComment"
+            files=".*EmptyFile.java"/>
+  <suppress id="presenceOfCompilationComment"
+            files="/checks/outertypefilename/package-info.java"/>
+  <suppress id="presenceOfCompilationComment"
+            files="/checks/coding/unusedprivatefield/InputUnusedPrivateFieldQualifiedThisUnresolvable.java"/>
+
+
+  <!--  Intentional suppressions for testing -->
+  <suppress checks="NewlineAtEndOfFile"
+            files="/checks/newlineatendoffile/InputNewlineAtEndOfFileNoNewlineLfCrCrlf.java"/>
+  <suppress checks="NewlineAtEndOfFile"
+            files="checks/newlineatendoffile/InputNewlineAtEndOfFileNoNewline.java"/>
+  <suppress checks="NewlineAtEndOfFile"
+            files="/checks/newlineatendoffile/InputNewlineAtEndOfFileNoNewline2.java"/>
+  <suppress checks="NewlineAtEndOfFile"
+            files="/checks/newlineatendoffile/InputNewlineAtEndOfFileNoNewlineCr.java"/>
+  <suppress checks="NewlineAtEndOfFile"
+            files="/checks/newlineatendoffile/InputNewlineAtEndOfFileNoNewlineCrlf.java"/>
+
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/redundantimport/InputRedundantImportWithoutPackage.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/coding/illegaltype/InputIllegalTypeSameFileNameFalsePositive.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/coding/illegaltype/InputIllegalTypeTestSameFileNameGeneral.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/metrics/classfanoutcomplexity/InputClassFanOutComplexityExcludedPackagesAllIgnored.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/metrics/classfanoutcomplexity/InputClassFanOutComplexityExcludedPackagesCommonPackage.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/metrics/classfanoutcomplexity/InputClassFanOutComplexityExcludedPackagesDirectPackages.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderThirdPartyAndSpecial.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderThirdPartyAndSpecial2.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderDefault4.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderDefault6.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderSingleLine.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderSingleLineList.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrderSpanMultipleLines.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/customimportorder/InputCustomImportOrder_OverlappingPatterns.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/unusedimports/InputUnusedImportsShadowed.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/imports/redundantimport/InputRedundantImportWithChecker.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/checks/coding/unnecessarypermitsclause/InputUnnecessaryPermitsClauseSubClassesInAnotherFile.java"/>
+  <suppress id="noCheckstyleInInputs"
+          files="/packageobjectfactory/bar/FooCheck.java"/>
+  <suppress id="noCheckstyleInInputs"
+          files="/packageobjectfactory/foo/FooCheck.java"/>
+  <suppress id="noCheckstyleInInputs"
+          files="/packageobjectfactory/abc/FooCheck.java"/>
+  <suppress id="noCheckstyleInInputs"
+          files="/packageobjectfactory/zoo/FooCheck.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/com/google/checkstyle/test/chapter3filestructure/rule333orderingandspacing/InputFormattedOrderingAndSpacingValid.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/org/checkstyle/suppressionxpathfilter/imports/customimportorder/InputXpathCustomImportOrderFour.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/com/google/checkstyle/test/chapter3filestructure/rule332nolinewrap/InputNoLineWrapping.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/org/checkstyle/suppressionxpathfilter/imports/customimportorder/InputXpathCustomImportOrderSix.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/com/google/checkstyle/test/chapter3filestructure/rule333orderingandspacing/InputOrderingAndSpacingValid.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/com/google/checkstyle/test/chapter3filestructure/rule333orderingandspacing/InputOrderingAndSpacingValid2.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/org/checkstyle/suppressionxpathfilter/blocks/needbraces/InputXpathNeedBracesSingleLine.java"/>
+  <suppress id="noCheckstyleInInputs"
+            files="/it/resources/com/google/checkstyle/test/chapter3filestructure/rule333orderingandspacing/InputFormattedOrderingAndSpacingValid2.java"/>
+
+  <!-- until https://github.com/checkstyle/checkstyle/issues/22775 -->
+  <suppress id="violationBetweenAnnotationAndMethod"
+            files="[\\/]checks[\\/]coding[\\/]textblockgooglestyleformatting[\\/]InputTextBlockGoogleStyleFormattingAnnotations\.java"/>
+  <suppress id="violationBetweenAnnotationAndMethod"
+            files="[\\/]checks[\\/]suppresswarningsholder[\\/]InputSuppressWarningsHolderAlias6\.java"/>
+  <suppress id="violationBetweenJavadocAndMethod"
+            files="[\\/]checks[\\/]suppresswarningsholder[\\/]InputSuppressWarningsHolderAlias6\.java"/>
+  <suppress id="violationBetweenAnnotationAndMethod"
+            files="[\\/]checks[\\/]whitespace[\\/]emptylinewrappinginblock[\\/]InputEmptyLineWrappingInBlockArrayInit\.java"/>
+  <suppress id="violationBetweenAnnotationAndMethod"
+            files="[\\/]com[\\/]google[\\/]checkstyle[\\/]test[\\/]chapter4formatting[\\/]rule462horizontalwhitespace[\\/]InputParenPad\.java"/>
+  <suppress id="violationBetweenAnnotationAndMethod"
+            files="[\\/]com[\\/]google[\\/]checkstyle[\\/]test[\\/]chapter4formatting[\\/]rule4853methodsandconstructorsannotations[\\/]InputMethodsAndConstructorsAnnotations\.java"/>
+  <suppress id="violationBetweenJavadocAndMethod"
+            files="[\\/]com[\\/]google[\\/]checkstyle[\\/]test[\\/]chapter4formatting[\\/]rule4853methodsandconstructorsannotations[\\/]InputMethodsAndConstructorsAnnotations\.java"/>
+  <suppress id="violationBetweenJavadocAndMethod"
+            files="[\\/]org[\\/]checkstyle[\\/]suppressionxpathfilter[\\/]javadoc[\\/]blockcommentendposition[\\/]InputXpathBlockCommentEndPositionOne\.java"/>
+
+</suppressions>

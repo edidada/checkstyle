@@ -1,0 +1,335 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+  "-//Checkstyle//DTD SuppressionFilter Configuration 1.1//EN"
+  "https://checkstyle.org/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclaration"
+            files="src/test/resources-noncompilable/com/puppycrawl/tools/checkstyle/checks/whitespace/emptylineseparator/InputEmptyLineSeparatorCompactNoPackage.java"/>
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="packagedeclaration/InputPackageDeclarationNoPackage\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="unusedlocalvariable/InputUnusedLocalVariableNoPackageStatement\.java"/>
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="packagename/compact/InputPackageNameCompactSourceFileDefault\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="packagename/compact/InputPackageNameCompactSourceFileProperties\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="/resources-noncompilable/.*/packagedeclaration/Input.*\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="InputFinalClassClassWithPrivateCtorWithNestedExtendingClassWithoutPackage\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderNoPackage\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderNoPackage2\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderNoPackage3\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderDefaultPackage\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderSamePackage\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderSamePackage2\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderSamePackageDepth25\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderSamePackageDepth252\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderSamePackageDepth253\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="customimportorder/InputCustomImportOrderSamePackageDepth254\.java"/>
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="illegalinstantiation/InputIllegalInstantiationNoPackage\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="illegalinstantiation/InputIllegalInstantiationLang\d*\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="illegalinstantiation/InputIllegalInstantiationBeginTree2\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="redundantimport/InputRedundantImport_UnnamedPackage\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="redundantimport/InputRedundantImportWithoutPackage\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="unusedimports/InputUnusedImportsFileInUnnamedPackage\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="importcontrol/InputImportControlBeginTree2\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="annotateddeclarationvisibility/InputAnnotatedDeclarationVisibilityClear2\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+            files="unusedimports/InputUnusedImportsSingleWordPackage\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="linelength/InputLineLengthLongPackageStatement\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="unusedlocalvariable/InputUnusedLocalVariableWithoutPackageStatement\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="uncommentedmain/InputUncommentedMainBeginTreePackage2\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="PackageDeclarationCheck"
+    files="rulepackagenames/InputBadPackageName2\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="rulepackagenames/InputPackageBadName3\.java"/>
+  <suppress checks="PackageDeclarationCheck"
+    files="rulepackagenames/InputPackageNameBad\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="RegexpSingleline"
+    files="javadoctype/InputJavadocTypeWithBlockComment\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="OuterTypeFilename"
+    files="/InputOuterType.*\.java"/>
+  <suppress checks="OuterTypeFilename"
+    files="/InputSuppressionXpathFilterDecideByMessage\.java"/>
+  <suppress checks="OuterTypeFilename"
+    files="rule522classnames/Input.*ClassNames\.java"/>
+  <suppress checks="OuterTypeFilename"
+    files="/package-info\.java"/>
+  <suppress checks="OuterTypeFilename"
+    files="src/it/resources/.*/InputXpathOuterTypeFilename.*\.java"/>
+  <suppress checks="OuterTypeFilename"
+    files="src/it/resources/.*/InputFileName3\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress id="noTrailingWhitespace"
+    files="rule462horizontalwhitespace/InputWhitespaceTrailingWhitespace\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputJavadocContentLocationTrailingSpace\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputJavadocUtilizingTrailingSpaceIgnoreTooShortPatternSpaces\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputJavadocParagraphCorrect\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputJavadocTagContinuationIndentationGuavaFalsePositive\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputRegexpTrailingComment10\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputRegexpSinglelineJavaTrailingComment10\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="/InputTextBlockGoogleStyleFormatting10\.java"/>
+  <suppress id="noTrailingWhitespace"
+            files="/javadocparagraph/InputJavadocParagraphCheck1\.java"/>
+  <suppress id="noTrailingWhitespace"
+            files="/javadocparagraph/InputJavadocParagraphIncorrect4\.java"/>
+
+  <!-- Input file contains trailing whitespace to kill pitest mutation -->
+  <suppress id="noTrailingWhitespace"
+    files="separatorwrap/InputSeparatorWrapForTestTrailingWhitespace\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="nonemptyatclausedescription/InputNonEmptyAtclauseDescriptionOne\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="requireemptylinebeforeblocktaggroup/InputRequireEmptyLineBeforeBlockTagGroupIncorrect\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="requireemptylinebeforeblocktaggroup/InputRequireEmptyLineBeforeBlockTagGroupCorrect\.java"/>
+  <suppress id="noTrailingWhitespace"
+    files="javadoctagcontinuationindentation/InputJavadocTagContinuationIndentationDescription\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress id="JavadocUtilizingTrailingSpace"
+    files="src[\\/]test[\\/]resources[\\/].*[\\/]Input.*\.java"/>
+
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputJavadocMethodTabColumns\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsCase\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsCompound\.java\.txt$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsCompoundMismatch\.txt$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsDefault\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsDot\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsEmpty\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsJava\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsMultiple\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputFileTabCharacterExtensionsNonMatching\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputWhitespaceAfterTabColumnsWithFilter\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputWhitespaceAfterTabWidthEight\.java$"/>
+  <suppress checks="FileTabCharacter"
+    files="[\\/]InputWhitespaceAfterTabWidthFour\.java$"/>
+  <!-- intentional problem for testing -->
+  <suppress checks="FileTabCharacter"
+    files="/InputJavadocWithCrAsNewline\.javadoc"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputLeadingAsterisksExtended\.javadoc"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputListWithUnclosedItemInUnclosedParagraph\.javadoc"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputMixedCaseOfHtmlTags\.javadoc"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputUnclosedParagraphFollowedByJavadocTag\.javadoc"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputFileTabCharacter\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputJavadocUtilizingTrailingSpaceEdgeCases\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputMainGenerateChecksAndFilesSuppressionsTabWidth\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputMainGenerateXpathSuppressionsTabWidth\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputXpathQueryGeneratorTabWidth\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputFileTabCharacterSimple\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputFileTabCharacterSimple1\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputFileTabCharacterCustomMessage\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputCheckerTabCharacter\.txt"/>
+  <suppress checks="FileTabCharacter"
+    files=".*/src/it/resources/com/openjdk/checkstyle/test/chapterformatting/ruleindentation/InputFileTabCharacterInvalid\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="src/test/resources/com/puppycrawl/tools/checkstyle/checks/indentation/indentation/Input.*\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="src/test/resources/com/puppycrawl/tools/checkstyle/filters/suppresswithplaintextcommentfilter/Input.*"/>
+  <suppress checks="FileTabCharacter"
+    files="/it/resources/com/google/checkstyle/test/chapter2filebasic/rule231filetab/Input.*\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputRegressionJavaClass1\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputComments2\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputMainSuppressionsStringPrinter\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputXpathFileGeneratorAstFilter\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputNoLineWrapBad\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputNoLineWrapBad2\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputAstTreeStringPrinterFullOfBlockComments\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputAstTreeStringPrinterJavadocPosition\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputAstTreeStringPrinterComments\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputIllegalInstantiationLang\d*\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputMagicNumberAnnotationElement\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputInnerTypeLastClass\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputJavadocLeadingAsteriskAlignTabs\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputJavadocLeadingAsteriskAlignIndentationTabs\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputJavadocMissingWhitespaceAfterAsteriskValidWithTab\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputAbbreviationAsWordInNameOverridableMethod\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputAbbreviationAsWordInNameType\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputLineLengthSimpleOne\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputLineLengthSimpleTwo\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputLineLengthSimple1One\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputLineLengthSimple1Two\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputTodoCommentSimpleTwo\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputWhitespaceAroundSimple\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputWhitespaceAroundEmptyTypesAndCycles\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputWhitespaceAfterDefaultConfig\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputSingleSpaceSeparatorComments\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputSingleSpaceSeparatorErrors\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputParenPadWhitespace\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputNoWhitespaceBeforeTextBlocksTabIndent\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputJava14TextBlocksTabSize\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputStringTemplateBasicWithTabs\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputCheckerTabCharacter\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="/InputCheckerTabCharacterCustomWidth\.java"/>
+  <suppress checks="FileTabCharacter"
+    files="src/test/resources/com/puppycrawl/tools/checkstyle/checks/coding/textblockgooglestyleformatting/InputTextBlockGoogleStyleFormattingWithTabs\.java"/>
+  <!-- intentional tabs for testing SummaryJavadocCheck with tab-formatted javadoc -->
+  <suppress checks="FileTabCharacter"
+    files="/InputSummaryJavadocForbiddenFragmentsTabFormatted\.java"/>
+  <!-- intentional tabs, the check expands them to the configured tab width -->
+  <suppress checks="FileTabCharacter"
+    files="/InputOpenjdkMethodParameterAlignmentTabs.*\.java"/>
+
+  <!-- This file must not have a package statement, for testing purposes -->
+  <suppress checks="PackageDeclarationCheck"
+            files="/InputAstTreeStringPrinterTextBlocksEscapesAreOneChar\.java"/>
+  <suppress checks="PackageDeclaration"
+            files="/it/resources/com/google/checkstyle/test/chapter3filestructure/rule32packagestatement/InputMissingPackageDeclaration\.java"/>
+
+  <!-- intentional problem for testing -->
+  <suppress checks="FileLength"
+    files="/it/resources/com/google/checkstyle/test/.*/.*/.*\.java"/>
+  <suppress checks="FileLength"
+    files="/it/resources-noncompilable/com/google/checkstyle/test/.*/.*/.*\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/avoidescapedunicodecharacters/InputAvoidEscapedUnicodeCharactersAllEscapedUnicodeCharacters\.java"/>
+
+  <!-- Until https://github.com/checkstyle/checkstyle/issues/11163 -->
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeNoJavadoc\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeNoJavadoc_1\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypePublicOnly\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeNoJavadoc_2\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeJavadoc_1\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeJavadoc_2\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeJavadoc\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/javadoc/javadoctype/InputJavadocTypeJavadoc_3\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/checks/regexp/regexp/InputRegexpCheckStopEarly\.java"/>
+  <suppress checks="FileLength"
+    files="/test/resources/com/puppycrawl/tools/checkstyle/xpath/xpathmapper/InputXpathMapperStringConcat\.java"/>
+  <suppress checks="OuterTypeFilename"
+    files=".*/sariflogger/InputSarifLogger Space\.java"/>
+  <suppress id="resourceFileName"
+    files=".*/sariflogger/InputSarifLogger Space\.java"/>
+</suppressions>

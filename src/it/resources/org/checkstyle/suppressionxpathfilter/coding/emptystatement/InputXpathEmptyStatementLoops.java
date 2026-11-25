@@ -1,0 +1,13 @@
+/*
+EmptyStatement
+
+
+*/
+
+package org.checkstyle.suppressionxpathfilter.coding.emptystatement;
+
+public class InputXpathEmptyStatementLoops {
+    public void foo() {
+        for (int i = 0; i < 5; i++); // violation 'Empty statement.'
+    }
+}

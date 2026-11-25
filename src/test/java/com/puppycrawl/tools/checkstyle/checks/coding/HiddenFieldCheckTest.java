@@ -1,0 +1,913 @@
+///////////////////////////////////////////////////////////////////////////////////////////////
+// checkstyle: Checks Java source code and other text files for adherence to a set of rules.
+// Copyright (C) 2001-2026 the original author or authors.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+package com.puppycrawl.tools.checkstyle.checks.coding;
+
+import static com.google.common.truth.Truth.assertWithMessage;
+import static com.puppycrawl.tools.checkstyle.checks.coding.HiddenFieldCheck.MSG_KEY;
+
+import java.io.File;
+import java.util.Optional;
+import java.util.function.Predicate;
+
+import org.junit.jupiter.api.Test;
+
+import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
+import com.puppycrawl.tools.checkstyle.JavaParser;
+import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.TokenTypes;
+import com.puppycrawl.tools.checkstyle.internal.utils.TestUtil;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
+
+public class HiddenFieldCheckTest extends AbstractModuleTestSupport {
+
+    @Override
+    public String getPackageLocation() {
+        return "com/puppycrawl/tools/checkstyle/checks/coding/hiddenfield";
+    }
+
+    @Test
+    public void testStaticVisibilityFromLambdas() throws Exception {
+        final String[] expected = {
+            "31:34: " + getCheckMessage(MSG_KEY, "value"),
+            "64:31: " + getCheckMessage(MSG_KEY, "languageCode"),
+            "74:35: " + getCheckMessage(MSG_KEY, "number"),
+            "87:35: " + getCheckMessage(MSG_KEY, "id"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldLambdas.java"), expected);
+    }
+
+    @Test
+    public void testStaticVisibilityFromLambdasInMethods() throws Exception {
+        final String[] expected = {
+            "46:33: " + getCheckMessage(MSG_KEY, "note"),
+            "72:48: " + getCheckMessage(MSG_KEY, "stringValue"),
+            "72:69: " + getCheckMessage(MSG_KEY, "intValue"),
+            "86:69: " + getCheckMessage(MSG_KEY, "doubleValue"),
+            "99:51: " + getCheckMessage(MSG_KEY, "firstString"),
+            "99:64: " + getCheckMessage(MSG_KEY, "secondString"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldLambdasInMethods.java"), expected);
+    }
+
+    @Test
+    public void testStaticVisibilityFromLambdasInterfaces() throws Exception {
+        final String[] expected = {
+            "35:49: " + getCheckMessage(MSG_KEY, "first"),
+            "62:62: " + getCheckMessage(MSG_KEY, "mPi"),
+            "79:27: " + getCheckMessage(MSG_KEY, "justSomeList"),
+            "79:61: " + getCheckMessage(MSG_KEY, "justSomeMap"),
+            "94:55: " + getCheckMessage(MSG_KEY, "someObject"),
+            "103:52: " + getCheckMessage(MSG_KEY, "someObject"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldLambdasInterfaces.java"), expected);
+    }
+
+    @Test
+    public void testStaticVisibilityFromAnonymousClasses() throws Exception {
+        final String[] expected = {
+            "22:45: " + getCheckMessage(MSG_KEY, "other"),
+            "28:42: " + getCheckMessage(MSG_KEY, "other"),
+            "36:49: " + getCheckMessage(MSG_KEY, "other"),
+            "46:53: " + getCheckMessage(MSG_KEY, "other"),
+            "58:26: " + getCheckMessage(MSG_KEY, "someField"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldStaticVisibility.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldBasic() throws Exception {
+        final String[] expected = {
+            "21:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "30:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "35:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "50:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "59:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "60:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "65:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "69:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "81:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "82:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "87:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenFieldBasic.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldInterface() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenFieldInterface.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldStatic() throws Exception {
+        final String[] expected = {
+            "22:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "27:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "32:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:13: " + getCheckMessage(MSG_KEY, "hidden"),
+
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenFieldStatic.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldPropertySetter() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenFieldPropertySetter.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldEnum() throws Exception {
+        final String[] expected = {
+            "30:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "47:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "53:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenFieldEnum.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldMisc() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenFieldMisc.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField2Basic() throws Exception {
+        final String[] expected = {
+            "21:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "24:39: " + getCheckMessage(MSG_KEY, "hidden"),
+            "31:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "41:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "52:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "55:26: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "61:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "62:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "67:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "71:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "76:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "78:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "84:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "85:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "90:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField2Basic.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField2Interface() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField2Interface.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField2Static() throws Exception {
+        final String[] expected = {
+            "22:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "27:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "32:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "63:23: " + getCheckMessage(MSG_KEY, "y"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField2Static.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField2PropertySetter() throws Exception {
+        final String[] expected = {
+            "21:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "27:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "33:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "45:28: " + getCheckMessage(MSG_KEY, "prop"),
+            "64:41: " + getCheckMessage(MSG_KEY, "prop"),
+            "78:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "89:42: " + getCheckMessage(MSG_KEY, "prop2"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField2PropertySetter.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField2Enum() throws Exception {
+        final String[] expected = {
+            "30:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "40:31: " + getCheckMessage(MSG_KEY, "hidden"),
+            "47:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "53:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField2Enum.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField2Misc() throws Exception {
+        final String[] expected = {
+            "19:45: " + getCheckMessage(MSG_KEY, "x"),
+            "24:34: " + getCheckMessage(MSG_KEY, "xAxis"),
+            "31:23: " + getCheckMessage(MSG_KEY, "i"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField2Misc.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField3Basic() throws Exception {
+        final String[] expected = {
+            "21:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "24:39: " + getCheckMessage(MSG_KEY, "hidden"),
+            "31:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "41:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "62:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "71:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "78:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "85:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "90:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField3Basic.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField3Interface() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField3Interface.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField3Static() throws Exception {
+        final String[] expected = {
+            "22:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "27:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "32:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "63:23: " + getCheckMessage(MSG_KEY, "y"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField3Static.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField3PropertySetter() throws Exception {
+        final String[] expected = {
+            "21:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "27:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "33:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "45:28: " + getCheckMessage(MSG_KEY, "prop"),
+            "64:41: " + getCheckMessage(MSG_KEY, "prop"),
+            "78:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "89:42: " + getCheckMessage(MSG_KEY, "prop2"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField3PropertySetter.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField3Enum() throws Exception {
+        final String[] expected = {
+            "30:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "40:31: " + getCheckMessage(MSG_KEY, "hidden"),
+            "47:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "53:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField3Enum.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField3Misc() throws Exception {
+        final String[] expected = {
+            "18:45: " + getCheckMessage(MSG_KEY, "x"),
+            "23:34: " + getCheckMessage(MSG_KEY, "xAxis"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField3Misc.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField4Basic() throws Exception {
+        final String[] expected = {
+            "21:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "24:39: " + getCheckMessage(MSG_KEY, "hidden"),
+            "31:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "41:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "52:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "55:26: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "61:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "62:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "67:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "71:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "76:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "78:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "84:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "85:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "90:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField4Basic.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField4Interface() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField4Interface.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField4Static() throws Exception {
+        final String[] expected = {
+            "22:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "27:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "32:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "63:23: " + getCheckMessage(MSG_KEY, "y"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField4Static.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField4PropertySetter() throws Exception {
+        final String[] expected = {
+            "27:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "33:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "45:28: " + getCheckMessage(MSG_KEY, "prop"),
+            "64:41: " + getCheckMessage(MSG_KEY, "prop"),
+            "89:42: " + getCheckMessage(MSG_KEY, "prop2"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField4PropertySetter.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField4Enum() throws Exception {
+        final String[] expected = {
+            "30:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "40:31: " + getCheckMessage(MSG_KEY, "hidden"),
+            "47:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "53:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField4Enum.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField4Misc() throws Exception {
+        final String[] expected = {
+            "21:45: " + getCheckMessage(MSG_KEY, "x"),
+            "44:45: " + getCheckMessage(MSG_KEY, "prop"),
+            "69:46: " + getCheckMessage(MSG_KEY, "prop2"),
+        };
+        verifyWithInlineConfigParser(
+                 getPath("InputHiddenField4Misc.java"), expected);
+    }
+
+    /** Tests ignoreSetter and setterCanReturnItsClass properties. */
+    @Test
+    public void testHiddenField5Basic() throws Exception {
+        final String[] expected = {
+            "21:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "24:39: " + getCheckMessage(MSG_KEY, "hidden"),
+            "31:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "41:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "52:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "55:26: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "61:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "62:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "67:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "71:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "76:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "78:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "84:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "85:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "90:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField5Basic.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField5Interface() throws Exception {
+        final String[] expected = {
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField5Interface.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField5PropertySetter() throws Exception {
+        final String[] expected = {
+            "27:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "33:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "45:28: " + getCheckMessage(MSG_KEY, "prop"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField5PropertySetter.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField5Static() throws Exception {
+        final String[] expected = {
+            "22:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "27:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "32:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "36:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "63:23: " + getCheckMessage(MSG_KEY, "y"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField5Static.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField5Enum() throws Exception {
+        final String[] expected = {
+            "30:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "40:31: " + getCheckMessage(MSG_KEY, "hidden"),
+            "47:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "53:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField5Enum.java"), expected);
+    }
+
+    @Test
+    public void testHiddenField5Misc() throws Exception {
+        final String[] expected = {
+            "20:45: " + getCheckMessage(MSG_KEY, "x"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField5Misc.java"), expected);
+    }
+
+    /** Tests ignoreConstructorParameter property. */
+    @Test
+    public void testIgnoreConstructorParameter()
+            throws Exception {
+        final String[] expected = {
+            "29:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "38:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "43:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "48:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "59:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "68:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "69:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "74:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "78:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "83:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "85:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "91:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "92:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "97:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField6.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreConstructorParameterNothingHidden() throws Exception {
+        final String[] expected = {
+            "28:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "34:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "40:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "52:28: " + getCheckMessage(MSG_KEY, "prop"),
+            "66:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "71:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "76:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "80:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "107:23: " + getCheckMessage(MSG_KEY, "y"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField6NothingHidden.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreConstructorParameterEnum() throws Exception {
+        final String[] expected = {
+            "29:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "46:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "52:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+            "59:41: " + getCheckMessage(MSG_KEY, "x"),
+            "65:30: " + getCheckMessage(MSG_KEY, "xAxis"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField6Enum.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreConstructorParameterPropertySetter() throws Exception {
+        final String[] expected = {
+            "26:56: " + getCheckMessage(MSG_KEY, "prop"),
+            "40:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "51:42: " + getCheckMessage(MSG_KEY, "prop2"),
+            "63:19: " + getCheckMessage(MSG_KEY, "i"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField6PropertySetter.java"), expected);
+    }
+
+    /** Test against a class with field declarations in different order. */
+    @Test
+    public void testReordered()
+            throws Exception {
+        final String[] expected = {
+            "29:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "32:40: " + getCheckMessage(MSG_KEY, "hidden"),
+            "39:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "44:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "49:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "60:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "63:26: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "69:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "70:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "75:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "79:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "84:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "86:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "92:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "93:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "99:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldReorder.java"), expected);
+    }
+
+    @Test
+    public void testReorderedNothingHidden() throws Exception {
+        final String[] expected = {
+            "32:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "45:21: " + getCheckMessage(MSG_KEY, "hidden"),
+            "52:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "58:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldReorderNothingHidden.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreAbstractMethods() throws Exception {
+
+        final String[] expected = {
+            "30:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "33:34: " + getCheckMessage(MSG_KEY, "hidden"),
+            "40:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "45:18: " + getCheckMessage(MSG_KEY, "hidden"),
+            "50:33: " + getCheckMessage(MSG_KEY, "hidden"),
+            "61:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "64:26: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "70:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "71:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "76:22: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "80:22: " + getCheckMessage(MSG_KEY, "hidden"),
+            "85:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "87:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "93:17: " + getCheckMessage(MSG_KEY, "innerHidden"),
+            "94:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "99:13: " + getCheckMessage(MSG_KEY, "hidden"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField7.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreAbstractMethodsNothingHidden() throws Exception {
+        final String[] expected = {
+            "29:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "35:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "41:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "53:28: " + getCheckMessage(MSG_KEY, "prop"),
+            "67:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "72:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "77:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "81:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "108:23: " + getCheckMessage(MSG_KEY, "y"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField7NothingHidden.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreAbstractMethodsEnum() throws Exception {
+        final String[] expected = {
+            "30:17: " + getCheckMessage(MSG_KEY, "hidden"),
+            "40:31: " + getCheckMessage(MSG_KEY, "hidden"),
+            "47:13: " + getCheckMessage(MSG_KEY, "hidden"),
+            "53:13: " + getCheckMessage(MSG_KEY, "hiddenStatic"),
+            "66:30: " + getCheckMessage(MSG_KEY, "xAxis"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField7Enum.java"), expected);
+    }
+
+    @Test
+    public void testIgnoreAbstractMethodsPropertySetter() throws Exception {
+        final String[] expected = {
+            "27:56: " + getCheckMessage(MSG_KEY, "prop"),
+            "41:29: " + getCheckMessage(MSG_KEY, "prop"),
+            "52:42: " + getCheckMessage(MSG_KEY, "prop2"),
+            "64:19: " + getCheckMessage(MSG_KEY, "i"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenField7PropertySetter.java"), expected);
+    }
+
+    @Test
+    public void testReceiverParameter() throws Exception {
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldReceiver.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldEnhancedInstanceof() throws Exception {
+
+        final String[] expected = {
+            "26:39: " + getCheckMessage(MSG_KEY, "price"),
+            "37:35: " + getCheckMessage(MSG_KEY, "hiddenStaticField"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldEnhancedInstanceof.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldSwitchExpression() throws Exception {
+
+        final String[] expected = {
+            "28:13: " + getCheckMessage(MSG_KEY, "x"),
+            "32:30: " + getCheckMessage(MSG_KEY, "word"),
+            "33:35: " + getCheckMessage(MSG_KEY, "otherWord"),
+            "35:21: " + getCheckMessage(MSG_KEY, "y"),
+            "39:21: " + getCheckMessage(MSG_KEY, "z"),
+            "43:21: " + getCheckMessage(MSG_KEY, "a"),
+            "47:21: " + getCheckMessage(MSG_KEY, "b"),
+            "54:13: " + getCheckMessage(MSG_KEY, "x"),
+            "58:30: " + getCheckMessage(MSG_KEY, "word"),
+            "59:35: " + getCheckMessage(MSG_KEY, "otherWord"),
+            "61:21: " + getCheckMessage(MSG_KEY, "y"),
+            "65:21: " + getCheckMessage(MSG_KEY, "z"),
+            "69:21: " + getCheckMessage(MSG_KEY, "a"),
+            "73:21: " + getCheckMessage(MSG_KEY, "b"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldSwitchExpression.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldRecords() throws Exception {
+
+        final String[] expected = {
+            "23:17: " + getCheckMessage(MSG_KEY, "myHiddenInt"),
+            "28:17: " + getCheckMessage(MSG_KEY, "myHiddenInt"),
+            "36:17: " + getCheckMessage(MSG_KEY, "hiddenField"),
+            "44:39: " + getCheckMessage(MSG_KEY, "hiddenStaticField"),
+            "59:39: " + getCheckMessage(MSG_KEY, "price"),
+            "68:21: " + getCheckMessage(MSG_KEY, "x"),
+            "72:20: " + getCheckMessage(MSG_KEY, "string"),
+            "82:21: " + getCheckMessage(MSG_KEY, "x"),
+            "86:20: " + getCheckMessage(MSG_KEY, "string"),
+        };
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldRecords.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldLambdasInNestedScope() throws Exception {
+        final String[] expected = {
+            "21:34: " + getCheckMessage(MSG_KEY, "value"),
+        };
+        verifyWithInlineConfigParser(
+            getPath("InputHiddenFieldLambdas2.java"), expected);
+    }
+
+    @Test
+    public void testClassNestedInRecord() throws Exception {
+
+        final String[] expected = {
+            "23:26: " + getCheckMessage(MSG_KEY, "a"),
+        };
+        verifyWithInlineConfigParser(
+            getPath("InputHiddenFieldClassNestedInRecord.java"),
+            expected);
+    }
+
+    @Test
+    public void testHiddenFieldInnerRecordsImplicitlyStatic() throws Exception {
+
+        final String[] expected = {
+            "36:30: " + getCheckMessage(MSG_KEY, "pointer"),
+        };
+
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldInnerRecordsImplicitlyStatic.java"),
+                expected);
+    }
+
+    @Test
+    public void testHiddenFieldRecordsImplicitlyStaticClassComparison() throws Exception {
+
+        final String[] expected = {
+            "47:27: " + getCheckMessage(MSG_KEY, "x"),
+        };
+
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldRecordsImplicitlyStaticClassComparison.java"),
+                expected);
+    }
+
+    @Test
+    public void testHiddenFieldImplicitlyStaticTypes() throws Exception {
+
+        final String[] expected = {
+            "29:22: " + getCheckMessage(MSG_KEY, "shade"),
+            "31:24: " + getCheckMessage(MSG_KEY, "counter"),
+            "42:28: " + getCheckMessage(MSG_KEY, "counter"),
+            "61:22: " + getCheckMessage(MSG_KEY, "value"),
+        };
+
+        verifyWithInlineConfigParser(
+                getPath("InputHiddenFieldImplicitlyStaticTypes.java"),
+                expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFile() throws Exception {
+        final String[] expected = {
+            "18:21: " + getCheckMessage(MSG_KEY, "name"),
+            "18:31: " + getCheckMessage(MSG_KEY, "count"),
+        };
+        verifyWithInlineConfigParser(
+                getNonCompilablePath("compact/InputHiddenFieldCompactSourceFile.java"), expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFileStatic() throws Exception {
+        final String[] expected = {
+            "17:21: " + getCheckMessage(MSG_KEY, "name"),
+        };
+        verifyWithInlineConfigParser(
+                getNonCompilablePath("compact/InputHiddenFieldCompactSourceFileStatic.java"),
+                expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFileStaticFieldAndMethod() throws Exception {
+        final String[] expected = {
+            "17:28: " + getCheckMessage(MSG_KEY, "name"),
+        };
+        final String file = "compact/InputHiddenFieldCompactSourceFileStaticFieldAndMethod.java";
+        verifyWithInlineConfigParser(
+                getNonCompilablePath(file), expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFileInstanceFieldStaticMethod() throws Exception {
+        final String[] expected = {};
+        final String file =
+                "compact/InputHiddenFieldCompactSourceFileInstanceFieldStaticMethod.java";
+        verifyWithInlineConfigParser(
+                getNonCompilablePath(file), expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFileNested() throws Exception {
+        final String[] expected = {
+            "24:25: " + getCheckMessage(MSG_KEY, "name"),
+        };
+        final String file = "compact/InputHiddenFieldCompactSourceFileNested.java";
+        verifyWithInlineConfigParser(
+                getNonCompilablePath(file), expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFileDefault() throws Exception {
+        final String[] expected = {
+            "16:21: " + getCheckMessage(MSG_KEY, "name"),
+            "21:12: " + getCheckMessage(MSG_KEY, "name"),
+            "22:34: " + getCheckMessage(MSG_KEY, "count"),
+            "28:13: " + getCheckMessage(MSG_KEY, "count"),
+            "30:51: " + getCheckMessage(MSG_KEY, "name"),
+            "33:43: " + getCheckMessage(MSG_KEY, "count"),
+            "36:19: " + getCheckMessage(MSG_KEY, "x"),
+            "42:24: " + getCheckMessage(MSG_KEY, "name"),
+        };
+        final String file = "compact/InputHiddenFieldCompactSourceFileDefault.java";
+        verifyWithInlineConfigParser(
+                getNonCompilablePath(file), expected);
+    }
+
+    @Test
+    public void testHiddenFieldCompactSourceFileProperties() throws Exception {
+        final String[] expected = {
+            "23:21: " + getCheckMessage(MSG_KEY, "name"),
+            "29:18: " + getCheckMessage(MSG_KEY, "value"),
+            "40:25: " + getCheckMessage(MSG_KEY, "value"),
+            "48:22: " + getCheckMessage(MSG_KEY, "name"),
+        };
+        final String file = "compact/InputHiddenFieldCompactSourceFileProperties.java";
+        verifyWithInlineConfigParser(
+                getNonCompilablePath(file), expected);
+    }
+
+    @Test
+    public void testHiddenFieldRecordPattern() throws Exception {
+
+        final String[] expected = {
+            "24:46: " + getCheckMessage(MSG_KEY, "s"),
+            "24:53: " + getCheckMessage(MSG_KEY, "x"),
+            "32:39: " + getCheckMessage(MSG_KEY, "s"),
+            "32:46: " + getCheckMessage(MSG_KEY, "x"),
+            "41:45: " + getCheckMessage(MSG_KEY, "s"),
+            "41:52: " + getCheckMessage(MSG_KEY, "x"),
+            "41:63: " + getCheckMessage(MSG_KEY, "z"),
+            "49:37: " + getCheckMessage(MSG_KEY, "s"),
+            "49:44: " + getCheckMessage(MSG_KEY, "x"),
+        };
+        verifyWithInlineConfigParser(
+                getNonCompilablePath("InputHiddenFieldRecordPattern.java"), expected);
+    }
+
+    /**
+     * We cannot reproduce situation when visitToken is called and leaveToken is not.
+     * So, we have to use reflection to be sure that even in such situation
+     * state of the field will be cleared.
+     *
+     * @throws Exception when code tested throws exception
+     */
+    @Test
+    public void testClearState() throws Exception {
+        final HiddenFieldCheck check = new HiddenFieldCheck();
+        final DetailAST root = JavaParser.parseFile(new File(getPath("InputHiddenField8.java")),
+                JavaParser.Options.WITHOUT_COMMENTS);
+        final Optional<DetailAST> classDef = TestUtil.findTokenInAstByPredicate(root,
+            ast -> ast.getType() == TokenTypes.CLASS_DEF);
+
+        assertWithMessage("Ast should contain CLASS_DEF")
+                .that(classDef.isPresent())
+                .isTrue();
+        assertWithMessage("State is not cleared on beginTree")
+                .that(
+                    TestUtil.isStatefulFieldClearedDuringBeginTree(check, classDef.orElseThrow(),
+                        "frame", new CheckIfStatefulFieldCleared()))
+                .isTrue();
+    }
+
+    private static final class CheckIfStatefulFieldCleared implements Predicate<Object> {
+
+        @Override
+        public boolean test(Object frame) {
+            boolean result = frame != null;
+
+            // verify object is cleared
+            if (result
+                    && (TestUtil.getInternalState(frame, "parent", Boolean.class) != null
+                        || !TestUtil.<Boolean>getInternalState(frame, "staticType", Boolean.class)
+                        || TestUtil.getInternalState(frame, "frameName", Boolean.class) != null)) {
+                result = false;
+            }
+
+            return result;
+        }
+
+    }
+
+}

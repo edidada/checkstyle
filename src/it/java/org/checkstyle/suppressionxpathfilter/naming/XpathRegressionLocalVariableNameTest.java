@@ -1,0 +1,107 @@
+///////////////////////////////////////////////////////////////////////////////////////////////
+// checkstyle: Checks Java source code and other text files for adherence to a set of rules.
+// Copyright (C) 2001-2026 the original author or authors.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+package org.checkstyle.suppressionxpathfilter.naming;
+
+import static com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck.MSG_INVALID_PATTERN;
+
+import java.util.Collections;
+import java.util.List;
+
+import org.checkstyle.suppressionxpathfilter.AbstractXpathTestSupport;
+import org.junit.jupiter.api.Test;
+
+import com.puppycrawl.tools.checkstyle.checks.naming.LocalVariableNameCheck;
+
+public class XpathRegressionLocalVariableNameTest extends AbstractXpathTestSupport {
+
+    @Override
+    protected String getCheckName() {
+        return LocalVariableNameCheck.class.getSimpleName();
+    }
+
+    @Override
+    public String getPackageLocation() {
+        return "org/checkstyle/suppressionxpathfilter/naming/localvariablename";
+    }
+
+    @Test
+    public void testMethod() throws Exception {
+        final String pattern = "^([a-z][a-zA-Z0-9]*|_)$";
+        final String[] expectedViolations = {
+            "13:9: " + getCheckMessage(LocalVariableNameCheck.class, MSG_INVALID_PATTERN,
+                "VAR", pattern),
+        };
+
+        final List<String> expectedXpathQueries = Collections.singletonList(
+            "/COMPILATION_UNIT/CLASS_DEF[./IDENT["
+              + "@text='InputXpathLocalVariableNameMethod']]"
+              + "/OBJBLOCK/METHOD_DEF[./IDENT[@text='MyMethod']]"
+              + "/SLIST/VARIABLE_DEF/IDENT[@text='VAR']"
+        );
+
+        verifyXpathWithInlineConfigParser(getPath("InputXpathLocalVariableNameMethod.java"),
+                expectedXpathQueries,
+                expectedViolations);
+
+    }
+
+    @Test
+    public void testIteration() throws Exception {
+        final String pattern = "^([a-z][a-zA-Z0-9]*|_)$";
+        final String[] expectedViolations = {
+            "15:14: " + getCheckMessage(LocalVariableNameCheck.class, MSG_INVALID_PATTERN,
+                "var_1", pattern),
+        };
+
+        final List<String> expectedXpathQueries = Collections.singletonList(
+            "/COMPILATION_UNIT/CLASS_DEF[./IDENT["
+              + "@text='InputXpathLocalVariableNameIteration']]"
+              + "/OBJBLOCK/METHOD_DEF[./IDENT[@text='MyMethod']]/"
+              + "SLIST/LITERAL_FOR/FOR_INIT/VARIABLE_DEF/IDENT[@text='var_1']"
+        );
+
+        verifyXpathWithInlineConfigParser(getPath("InputXpathLocalVariableNameIteration.java"),
+                expectedXpathQueries,
+                expectedViolations);
+
+    }
+
+    @Test
+    public void testInnerClass() throws Exception {
+        final String pattern = "^([a-z][a-zA-Z0-9]*|_)$";
+        final String[] expectedViolations = {
+            "14:11: " + getCheckMessage(LocalVariableNameCheck.class, MSG_INVALID_PATTERN,
+                "VAR", pattern),
+        };
+
+        final List<String> expectedXpathQueries = Collections.singletonList(
+            "/COMPILATION_UNIT/CLASS_DEF[./IDENT["
+              + "@text='InputXpathLocalVariableNameInnerClass']]"
+              + "/OBJBLOCK/CLASS_DEF[./IDENT[@text='InnerClass']]/OBJBLOCK/"
+              + "METHOD_DEF[./IDENT[@text='myMethod']]/SLIST/VARIABLE_DEF/IDENT[@text='VAR']"
+        );
+
+        verifyXpathWithInlineConfigParser(getPath("InputXpathLocalVariableNameInnerClass.java"),
+                expectedXpathQueries,
+                expectedViolations);
+
+    }
+
+}

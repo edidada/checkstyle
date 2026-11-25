@@ -1,0 +1,32 @@
+package com.sun.checkstyle.test.chapter3fileorganization.rule313classdeclarations;
+
+// violation first line 'Header mismatch'
+
+/**
+ * Test input for declaration order with constructor order violation.
+ */
+public final class InputDeclarationOrderConstructor {
+
+    /** Static constant. */
+    public static final int CONST = 1;
+
+    /** Instance variable. */
+    private int instanceVar;
+
+    /**
+     * Gets value.
+     *
+     * @return instance variable value
+     */
+    public int getValue() {
+        return instanceVar;
+    }
+
+    // violation 4 lines below 'Constructor definition in wrong order.'
+    /**
+     * Constructor after method.
+     */
+    public InputDeclarationOrderConstructor() {
+        instanceVar = 0;
+    }
+}
