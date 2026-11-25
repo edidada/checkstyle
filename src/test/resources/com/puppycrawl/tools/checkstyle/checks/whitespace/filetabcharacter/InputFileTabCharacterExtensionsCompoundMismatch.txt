@@ -1,9 +1,0 @@
-/*
-FileTabCharacter
-eachLine = true
-fileExtensions = java.txt
-
-
-*/
-
-	value
